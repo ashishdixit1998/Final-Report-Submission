@@ -48,7 +48,6 @@ Thumbs.db
 
 # Git and Docker metadata
 .git/
-.github/
 
 # Docker
 docker-compose.override.yml
