@@ -1,0 +1,57 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+    networks:
+      - recommender_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      TOP_K: ${TOP_K}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      LOG_LEVEL: ${LOG_LEVEL}
+
+    volumes:
+      - ./output:/app/output
+      - ./data:/app/data:ro
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    networks:
+      - recommender_network
+
+volumes:
+  redis_data:
+
+networks:
+  recommender_network:
+    driver: bridge

@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+.cache/
+*.egg-info/
+build/
+dist/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Runtime files
+logs/
+*.log
+output/
+mlruns/
+
+# Data files
+data/
+*.csv
+*.pkl
+*.parquet
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git and Docker metadata
+.git/
+.github/
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+*.bak
+*.tmp
+*.retry

@@ -1,0 +1,40 @@
+# Git
+.git
+.github
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Output
+output/
+mlruns/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+
+# Environment
+.env
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
