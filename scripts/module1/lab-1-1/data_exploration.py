@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab1"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 1: Gradient Boosting for Purchase Prediction")
@@ -16,11 +26,11 @@ print("=" * 60)
 print("\n[1] Loading datasets...")
 
 # TODO: Load 'data/events.csv' using pandas
-events = pd.read_csv('../../../data/events.csv')
+events = pd.read_csv(DATA_DIR / 'events.csv')
 
 # TODO: Load the two item properties datasets ('data/item_properties_part1.csv' and 'data/item_properties_part2.csv')
-props1 = pd.read_csv('../../../data/item_properties_part1.csv')
-props2 = pd.read_csv('../../../data/item_properties_part2.csv')
+props1 = pd.read_csv(DATA_DIR / 'item_properties_part1.csv')
+props2 = pd.read_csv(DATA_DIR / 'item_properties_part2.csv')
 
 # TODO: Combine props1 and props2 vertically into a single dataframe named 'item_props'
 # Hint: Use pd.concat and remember to ignore the original indexes so they form a continuous sequence
@@ -158,15 +168,6 @@ axes[1].set_yscale('log')
 # --- Save and Render ---
 # TODO: Adjust the subplot layout automatically to prevent overlap text, save to 'output/01_eda_overview.png' with 150 DPI, and display the plot
 # Hint: use plt.tight_layout(), plt.savefig(), and plt.show()
-from pathlib import Path
-
-# Project root
-ROOT = Path(__file__).resolve().parents[3]
-
-# Output folder
-OUTPUT_DIR = ROOT / "output/Lab1"
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
 
 plt.tight_layout(rect=[0, 0, 1, 0.95])
 

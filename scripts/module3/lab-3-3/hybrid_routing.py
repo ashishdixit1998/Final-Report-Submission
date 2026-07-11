@@ -15,6 +15,16 @@ import pickle
 import time
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab3"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 try:
     import faiss
@@ -35,10 +45,10 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading all artifacts...")
 
-with open("../../../data/routing_split.pkl",    "rb") as f: routing   = pickle.load(f)
-with open("../../../data/lightfm_artifacts.pkl","rb") as f: lfm_art   = pickle.load(f)
-with open("../../../data/als_artifacts.pkl",    "rb") as f: als_art   = pickle.load(f)
-with open("../../../data/faiss_artifacts.pkl",  "rb") as f: faiss_art = pickle.load(f)
+with open(DATA_DIR / "routing_split.pkl",    "rb") as f: routing   = pickle.load(f)
+with open(DATA_DIR / "lightfm_artifacts.pkl","rb") as f: lfm_art   = pickle.load(f)
+with open(DATA_DIR / "als_artifacts.pkl",    "rb") as f: als_art   = pickle.load(f)
+with open(DATA_DIR / "faiss_artifacts.pkl",  "rb") as f: faiss_art = pickle.load(f)
 
 als_users    = routing['als_users']
 lfm_users    = routing['lightfm_users']
@@ -61,7 +71,7 @@ user_factors_norm = faiss_art['user_factors_norm']
 faiss_item_ids    = faiss_art['item_ids']
 faiss_user_to_idx = faiss_art['user_to_idx']
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
 
 # TODO: Build a historical purchase dictionary tracking already bought items per user
@@ -76,7 +86,7 @@ purchases = (
 
 if FAISS_AVAILABLE:
     try:
-        faiss_index = faiss.read_index("../../../data/faiss_index.bin")
+        faiss_index = faiss.read_index(DATA_DIR / "faiss_index.bin")
         print(f"    FAISS index loaded : {faiss_index.ntotal:,} items")
     except:
         FAISS_AVAILABLE = False
@@ -547,7 +557,7 @@ axes[2].set_xlabel("Items Removed")
 axes[2].set_ylabel("Requests")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab3/03_routing_analysis.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "03_routing_analysis.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -569,7 +579,7 @@ routing_artifacts = {
     "exclusions": exclusions
 }
 
-with open("../../../data/routing_artifacts.pkl", "wb") as f:
+with open(DATA_DIR / "routing_artifacts.pkl", "wb") as f:
     pickle.dump(routing_artifacts, f)
 
 print("    Saved -> data/routing_artifacts.pkl")

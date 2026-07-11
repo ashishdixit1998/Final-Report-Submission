@@ -17,6 +17,16 @@ warnings.filterwarnings('ignore')
  
 from implicit.als import AlternatingLeastSquares
 from implicit.evaluation import ndcg_at_k, precision_at_k
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab3"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
  
 print("=" * 60)
 print("  MODULE 3 | LAB 3.1")
@@ -39,10 +49,10 @@ print(f"\n  Demo scale: {N_USERS:,} users | {N_ITEMS:,} items | {N_FACTORS} fact
 # ---------------------------------------------------------------------------
 print("[1] Loading events and Module 2 routing split...")
  
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
  
-with open("../../../data/routing_split.pkl", "rb") as f:
+with open(DATA_DIR / "routing_split.pkl", "rb") as f:
     routing = pickle.load(f)
  
 als_users   = routing['als_users']
@@ -408,7 +418,7 @@ axes[2].bar(
 
 axes[2].tick_params(axis='x', rotation=20)
 plt.tight_layout()
-plt.savefig("../../../output/Lab3/01_als_analysis.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "01_als_analysis.png", dpi=150, bbox_inches='tight')
 plt.show()
  
 # ---------------------------------------------------------------------------
@@ -442,7 +452,7 @@ artifacts = {
     "best_config": best_config
 }
 
-with open("../../../data/als_artifacts.pkl", "wb") as f:
+with open(DATA_DIR / "als_artifacts.pkl", "wb") as f:
     pickle.dump(artifacts, f)
 print("    Saved -> data/als_artifacts.pkl")
 print("    Move to: 02_faiss_index.py")

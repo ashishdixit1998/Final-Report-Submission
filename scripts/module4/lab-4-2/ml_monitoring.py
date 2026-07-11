@@ -13,6 +13,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab4"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 4 | LAB 4.2")
@@ -25,9 +35,9 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading artifacts...")
 
-with open("../../../data/als_artifacts.pkl",    "rb") as f: als_art = pickle.load(f)
-with open("../../../data/lightfm_artifacts.pkl","rb") as f: lfm_art = pickle.load(f)
-with open("../../../data/faiss_artifacts.pkl",  "rb") as f: fai_art = pickle.load(f)
+with open(DATA_DIR / "als_artifacts.pkl",    "rb") as f: als_art = pickle.load(f)
+with open(DATA_DIR / "lightfm_artifacts.pkl","rb") as f: lfm_art = pickle.load(f)
+with open(DATA_DIR / "faiss_artifacts.pkl",  "rb") as f: fai_art = pickle.load(f)
 
 als_model         = als_art['model']
 als_user_to_idx   = als_art['user_to_idx']
@@ -45,7 +55,7 @@ _, _, lfm_item_map, _ = lfm_dataset.mapping()
 lfm_item_ids_list = list(lfm_item_map.keys())
 n_lfm_items = len(lfm_item_ids_list)
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
 
 print(f"    ALS items    : {len(als_item_ids):,}")
@@ -427,7 +437,7 @@ axes[1,1].pie(
 axes[1,1].set_title("Cold Item Coverage")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab4/02_monitoring_dashboard.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "02_monitoring_dashboard.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 print("\n" + "=" * 60)

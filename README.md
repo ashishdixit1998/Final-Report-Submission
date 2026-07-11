@@ -92,6 +92,54 @@ The project expects the following files at minimum:
 - `data/user_features_engineered.csv`
 
 If any additional data files are required, they will be referenced in the lab scripts under `scripts/module*`.
+## Start Redis (Required)
+
+The FastAPI application uses Redis for caching recommendation results.
+
+Start Redis locally using Docker:
+
+```bash
+docker run -d --name redis -p 6379:6379 redis:7-alpine
+```
+
+If the Redis container already exists:
+
+```bash
+docker start redis
+```
+
+Verify Redis is running:
+
+```bash
+docker ps
+```
+
+You should see a container similar to:
+
+```text
+CONTAINER ID   IMAGE             STATUS         PORTS
+xxxxxxxxxxxx   redis:7-alpine    Up ...         0.0.0.0:6379->6379/tcp
+```
+
+---
+
+## Verify Redis Connection (Optional)
+
+Windows PowerShell:
+
+```powershell
+Test-NetConnection localhost -Port 6379
+```
+
+Expected output:
+
+```text
+TcpTestSucceeded : True
+```
+
+---
+
+
 
 ## Running the API
 

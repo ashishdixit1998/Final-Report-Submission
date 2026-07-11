@@ -14,6 +14,16 @@ import pickle
 import warnings
 import hashlib
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab3"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 3 | LAB 3.4")
@@ -26,12 +36,12 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading artifacts...")
 
-with open("../../../data/routing_split.pkl",    "rb") as f: routing   = pickle.load(f)
-with open("../../../data/als_artifacts.pkl",    "rb") as f: als_art   = pickle.load(f)
-with open("../../../data/lightfm_artifacts.pkl","rb") as f: lfm_art   = pickle.load(f)
-with open("../../../data/routing_artifacts.pkl","rb") as f: rt_art    = pickle.load(f)
+with open(DATA_DIR / "routing_split.pkl",    "rb") as f: routing   = pickle.load(f)
+with open(DATA_DIR / "als_artifacts.pkl",    "rb") as f: als_art   = pickle.load(f)
+with open(DATA_DIR / "lightfm_artifacts.pkl","rb") as f: lfm_art   = pickle.load(f)
+with open(DATA_DIR / "routing_artifacts.pkl","rb") as f: rt_art    = pickle.load(f)
 
-events    = pd.read_csv("../../../data/events.csv")
+events    = pd.read_csv(DATA_DIR / "events.csv")
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
 purchases = events[events['event'] == 'transaction'].copy()
 
@@ -330,7 +340,7 @@ axes[2].set_title("Average NDCG@10")
 axes[2].set_ylabel("Mean Score")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab3/04_ab_protocol.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "04_ab_protocol.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 print("\n" + "=" * 60)

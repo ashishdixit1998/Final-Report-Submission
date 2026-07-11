@@ -19,6 +19,12 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+DATA_DIR = ROOT / "data"
+OUTPUT_DIR = ROOT / "output" / "Lab4"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 4 | LAB 4.1")
@@ -42,7 +48,7 @@ except ImportError:
 
 # TODO: Configure MLflow back-end database storage tracking URI to "sqlite:///data/mlflow.db"
 # Hint: Call mlflow.set_tracking_uri()
-mlflow.set_tracking_uri("sqlite:///../../../data/mlflow.db")
+mlflow.set_tracking_uri(f"sqlite:///{DATA_DIR / 'mlflow.db'}")
 
 # TODO: Initialize or switch to an active MLflow experiment workspace named "hybrid-recommender"
 # Hint: Call mlflow.set_experiment()
@@ -55,9 +61,9 @@ print(f"    Experiment     : hybrid-recommender")
 # ---------------------------------------------------------------------------
 print("\n[2] Loading model artifacts...")
 
-with open("../../../data/als_artifacts.pkl",    "rb") as f: als_art = pickle.load(f)
-with open("../../../data/lightfm_artifacts.pkl","rb") as f: lfm_art = pickle.load(f)
-with open("../../../data/faiss_artifacts.pkl",  "rb") as f: fai_art = pickle.load(f)
+with open(DATA_DIR / "als_artifacts.pkl",    "rb") as f: als_art = pickle.load(f)
+with open(DATA_DIR / "lightfm_artifacts.pkl","rb") as f: lfm_art = pickle.load(f)
+with open(DATA_DIR / "faiss_artifacts.pkl",  "rb") as f: fai_art = pickle.load(f)
 
 als_model   = als_art['model']
 lfm_model   = lfm_art['model_hybrid']
@@ -85,8 +91,8 @@ with mlflow.start_run(run_name="als_personalization_engine"):
 
     mlflow.log_metric("ndcg_at_10", best_ndcg)
 
-    mlflow.log_artifact("../../../data/als_artifacts.pkl", artifact_path="model")
-    mlflow.log_artifact("../../../data/faiss_artifacts.pkl", artifact_path="model")
+    mlflow.log_artifact(DATA_DIR / "als_artifacts.pkl", artifact_path="model")
+    mlflow.log_artifact(DATA_DIR / "faiss_artifacts.pkl", artifact_path="model")
     # TODO: Log hyperparameter tokens to the metadata registry using mlflow.log_param()
     # Log: "model_type" -> "ALS", "factors" -> als_model.factors, "iterations" -> als_model.iterations, 
     # "regularization" -> als_model.regularization, "n_users" -> len(als_art['user_ids']), "n_items" -> len(als_art['item_ids'])
@@ -119,7 +125,7 @@ with mlflow.start_run(run_name="lightfm_coldstart_engine"):
     mlflow.log_metric("precision_at_10", hybrid_p10)
 
     mlflow.log_artifact(
-        "../../../data/lightfm_artifacts.pkl",
+        DATA_DIR / "lightfm_artifacts.pkl",
         artifact_path="model"
     )
     # TODO: Log system tracking properties using mlflow.log_param()
@@ -435,7 +441,7 @@ axes[1].set_xlabel("Percentile")
 axes[1].set_ylabel("Latency (ms)")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab4/01_fastapi_latency.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "01_fastapi_latency.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 

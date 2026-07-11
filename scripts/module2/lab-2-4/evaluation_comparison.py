@@ -31,6 +31,16 @@ warnings.filterwarnings('ignore')
 from lightfm.evaluation import precision_at_k, recall_at_k
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab2"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
  
 print("=" * 60)
 print("  MODULE 2 | LAB 2.4")
@@ -43,13 +53,13 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading all model artifacts...")
  
-with open("../../../data/cb_artifacts.pkl", "rb") as f:
+with open(DATA_DIR / "cb_artifacts.pkl", "rb") as f:
     cb_artifacts = pickle.load(f)
  
-with open("../../../data/cf_artifacts.pkl", "rb") as f:
+with open(DATA_DIR / "cf_artifacts.pkl", "rb") as f:
     cf_artifacts = pickle.load(f)
  
-with open("../../../data/lightfm_artifacts.pkl", "rb") as f:
+with open(DATA_DIR / "lightfm_artifacts.pkl", "rb") as f:
     lfm_artifacts = pickle.load(f)
  
 # CB artifacts
@@ -72,7 +82,7 @@ lfm_item_features= lfm_artifacts['item_features_matrix']
 cold_start_users = lfm_artifacts['cold_start_users']
  
 # Load events
-events    = pd.read_csv("../../../data/events.csv")
+events    = pd.read_csv(DATA_DIR / "events.csv")
 purchases = events[events['event'] == 'transaction'][['visitorid', 'itemid']].copy()
 purchases.columns = ['user_id', 'item_id']
  
@@ -295,7 +305,7 @@ routing_split = {
     'cutoff_date': cutoff_date,
     'train_users': train_users,
 }
-with open("../../../data/routing_split.pkl", "wb") as f:
+with open(DATA_DIR / "routing_split.pkl", "wb") as f:
     pickle.dump(routing_split, f)
 print("\n    Saved -> data/routing_split.pkl  (Module 3 loads this)")
  
@@ -337,7 +347,7 @@ for ax, vals, title in zip(
         )
  
 plt.tight_layout()
-plt.savefig("../../../output/Lab2/04_model_comparison.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "04_model_comparison.png", dpi=150, bbox_inches='tight')
 plt.show()
 print("    Saved -> output/Lab2/04_model_comparison.png")
  

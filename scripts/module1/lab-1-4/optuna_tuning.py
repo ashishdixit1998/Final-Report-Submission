@@ -10,6 +10,16 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 import warnings
 warnings.filterwarnings('ignore')
 optuna.logging.set_verbosity(optuna.logging.WARNING)
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab1"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
  
 print("=" * 60)
 print("  MODULE 1 | LAB 1.4")
@@ -22,7 +32,7 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading engineered feature matrix from Lab 1.3...")
  
-df = pd.read_csv("../../../data/user_features_engineered.csv")
+df = pd.read_csv(DATA_DIR / "user_features_engineered.csv")
  
 # TODO: Extract the list of feature column names (all columns except 'visitorid' and 'purchased')
 FEATURE_COLS = [c for c in df.columns if c not in ['visitorid', 'purchased']]
@@ -330,7 +340,7 @@ axes[1].set_ylabel("CV AUC Score")
 axes[1].legend(fontsize=9)
  
 plt.tight_layout()
-plt.savefig("../../../output/Lab1/04_pareto_tradeoff.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "04_pareto_tradeoff.png", dpi=150, bbox_inches='tight')
 plt.show()
  
 # ---------------------------------------------------------------------------
@@ -363,7 +373,7 @@ ax.barh(
 ax.set_title("LightGBM Feature Importance (Tuned)", fontweight='bold')
 ax.set_xlabel("Importance")
 plt.tight_layout()
-plt.savefig("../../../output/Lab1/04_lgb_feature_importance.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "04_lgb_feature_importance.png", dpi=150, bbox_inches='tight')
 plt.show()
  
 print("\n" + "=" * 60)

@@ -11,6 +11,16 @@ from sklearn.metrics import (
 )
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab1"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 1 | LAB 1.2")
@@ -20,7 +30,7 @@ print("=" * 60)
   
 print("\n[1] Loading events and building minimal feature matrix...")
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / 'events.csv')
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
 
 # Target Definition: identifying users who ever made a purchase
@@ -108,8 +118,8 @@ print(f"\n    Sample statistics:")
 print(user_df[RAW_FEATURES].describe().round(2).to_string())
 
 # Save matrix state for Lab 1.3
-user_df.to_csv("../../../data/user_features_baseline.csv", index=False)
-print(f"\n    Saved -> data/user_features_baseline.csv")
+user_df.to_csv(DATA_DIR / "user_features_baseline.csv", index=False)
+print(f"\n    Saved -> {DATA_DIR / 'user_features_baseline.csv'}")
 
 
 # ==========================================
@@ -273,7 +283,7 @@ axes[1].set_title("Precision-Recall — Baseline Models")
 axes[1].legend(fontsize=9)
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab1/02_baseline_evaluation.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "02_baseline_evaluation.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -316,7 +326,7 @@ ax.set_ylabel("Features")
 
 plt.tight_layout()
 plt.savefig(
-    "../../../output/Lab1/02_baseline_feature_importance.png",
+    OUTPUT_DIR / "02_baseline_feature_importance.png",
     dpi=150,
     bbox_inches='tight'
 )

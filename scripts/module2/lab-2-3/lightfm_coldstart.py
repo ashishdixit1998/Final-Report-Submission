@@ -23,6 +23,16 @@ warnings.filterwarnings('ignore')
 from lightfm import LightFM
 from lightfm.data import Dataset
 from lightfm.evaluation import precision_at_k, recall_at_k, auc_score
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab2"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 2 | LAB 2.3")
@@ -35,9 +45,9 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading data and artifacts from Labs 2.1 and 2.2...")
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 
-with open("../../../data/cf_artifacts.pkl", "rb") as f:
+with open(DATA_DIR / "cf_artifacts.pkl", "rb") as f:
     cf_artifacts = pickle.load(f)
 
 cf_precision = cf_artifacts['cf_results']['precision_at_10']
@@ -115,8 +125,8 @@ all_interactions = events[
 
 print("\n[2.1] Loading item features for LightFM...")
 
-props1 = pd.read_csv("../../../data/item_properties_part1.csv")
-props2 = pd.read_csv("../../../data/item_properties_part2.csv")
+props1 = pd.read_csv(DATA_DIR / "item_properties_part1.csv")
+props2 = pd.read_csv(DATA_DIR / "item_properties_part2.csv")
 props  = pd.concat([props1, props2], ignore_index=True)
 
 # Keep the most recent record per item-property pair
@@ -534,8 +544,8 @@ ax.legend()
 ax.grid(alpha=0.3)
 
 plt.tight_layout()
-os.makedirs("output", exist_ok=True)
-plt.savefig("../../../output/Lab2/03_lightfm_training.png", dpi=150, bbox_inches='tight')
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+plt.savefig(OUTPUT_DIR / "03_lightfm_training.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -568,7 +578,7 @@ lightfm_artifacts = {
     "results": results
 }
 
-with open("../../../data/lightfm_artifacts.pkl", "wb") as f:
+with open(DATA_DIR / "lightfm_artifacts.pkl", "wb") as f:
     pickle.dump(lightfm_artifacts, f)
 
 print("\n    Saved -> data/lightfm_artifacts.pkl")

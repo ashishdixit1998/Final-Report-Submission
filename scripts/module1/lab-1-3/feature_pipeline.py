@@ -6,7 +6,16 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import roc_auc_score, average_precision_score
 import warnings
 warnings.filterwarnings('ignore')
- 
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab1"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 print("=" * 60)
 print("  MODULE 1 | LAB 1.3")
 print("  Feature Engineering Pipeline")
@@ -18,7 +27,7 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading events...")
  
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 events['datetime'] = pd.to_datetime(events['timestamp'], unit='ms')
  
 purchaser_set = set(
@@ -29,7 +38,7 @@ pre_purchase = events[events['event'].isin(['view', 'addtocart'])].copy()
  
 print("    Loading baseline feature matrix from Lab 1.2...")
 # Load the baseline data generated in Lab 1.2 to build your new pipeline onto
-user_df = pd.read_csv("../../../data/user_features_baseline.csv")
+user_df = pd.read_csv(DATA_DIR / "user_features_baseline.csv")
 print(f"    Baseline columns: {list(user_df.columns)}")
  
 # ---------------------------------------------------------------------------
@@ -312,7 +321,7 @@ for bar in bars2:
         ha='center'
     )
 plt.tight_layout()
-plt.savefig("../../../output/Lab1/03_feature_engineering_lift.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "03_feature_engineering_lift.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -350,7 +359,7 @@ for i, v in enumerate(imp_df['importance'][::-1]):
 ax.set_title("Feature Importance — Full Engineered Set\n(Gold = top 3 features)", fontweight='bold')
 ax.set_xlabel("Importance (Gain)")
 plt.tight_layout()
-plt.savefig("../../../output/Lab1/03_final_feature_importance.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "03_final_feature_importance.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -362,7 +371,7 @@ plt.show()
 cols_to_save = ['visitorid'] + WAVE3_FEATURES + ['purchased']
 
 user_df[cols_to_save].to_csv(
-    "../../../data/user_features_engineered.csv",
+    DATA_DIR / "user_features_engineered.csv",
     index=False
 )
 

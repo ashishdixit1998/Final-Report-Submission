@@ -15,6 +15,16 @@ from sklearn.preprocessing import normalize
 import scipy.sparse as sp
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab2"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 2 | LAB 2.1")
@@ -27,8 +37,8 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading item properties...")
 
-props1 = pd.read_csv("../../../data/item_properties_part1.csv")
-props2 = pd.read_csv("../../../data/item_properties_part2.csv")
+props1 = pd.read_csv(DATA_DIR / "item_properties_part1.csv")
+props2 = pd.read_csv(DATA_DIR / "item_properties_part2.csv")
 
 # TODO: Combine props1 and props2 vertically into a unified dataframe named 'props'
 props = pd.concat([props1, props2], ignore_index=True)
@@ -151,7 +161,7 @@ if item_ids is not None and tfidf_matrix is not None:
 # ---------------------------------------------------------------------------
 print("\n[6] Evaluating with purchase data...")
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 
 # TODO: Filter events down to 'transaction' occurrences only and pull out ['visitorid', 'itemid']
 purchases = events[
@@ -263,7 +273,7 @@ axes[1].set_title("Top TF-IDF Terms\nfor Sample Item")
 axes[1].set_xlabel("TF-IDF Score")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab2/01_content_based_analysis.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "01_content_based_analysis.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -273,7 +283,7 @@ plt.show()
 import pickle
 # TODO: Save tfidf_matrix, item_ids, vectorizer, and cb_results dictionaries to a pickle file
 # Path: "data/cb_artifacts.pkl"
-with open("../../../data/cb_artifacts.pkl", "wb") as f:
+with open(DATA_DIR / "cb_artifacts.pkl", "wb") as f:
     pickle.dump(
         {
             "tfidf_matrix": tfidf_matrix,

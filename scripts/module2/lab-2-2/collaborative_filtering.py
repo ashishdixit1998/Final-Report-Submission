@@ -15,6 +15,16 @@ from sklearn.preprocessing import normalize
 import pickle
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab2"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 60)
 print("  MODULE 2 | LAB 2.2")
@@ -27,7 +37,7 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading events and building implicit interaction matrix...")
 
-events = pd.read_csv("../../../data/events.csv")
+events = pd.read_csv(DATA_DIR / "events.csv")
 
 # TODO: Define confidence weights for implicit user actions.
 # Assign weights: 'view' -> 1, 'addtocart' -> 2, 'transaction' -> 3
@@ -182,7 +192,7 @@ print("\n[6] Evaluating CF — Precision@10 vs CB baseline...")
 
 # Load Content-Based results from Lab 2.1 archive artifact
 try:
-    with open("../../../data/cb_artifacts.pkl", "rb") as f:
+    with open(DATA_DIR / "cb_artifacts.pkl", "rb") as f:
         cb_artifacts = pickle.load(f)
     cb_precision = cb_artifacts['cb_results']['precision_at_10']
     print(f"    CB Precision@10 (Lab 2.1): {cb_precision:.4f}")
@@ -286,7 +296,7 @@ axes[1].set_xlabel("Number of Interactions per User")
 axes[1].set_ylabel("Number of Users (log)")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab2/02_cf_sparsity_analysis.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "02_cf_sparsity_analysis.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -312,7 +322,7 @@ cf_artifacts = {
     }
 }
 
-with open("../../../data/cf_artifacts.pkl", "wb") as f:
+with open(DATA_DIR / "cf_artifacts.pkl", "wb") as f:
     pickle.dump(cf_artifacts, f)
 
 print("\n    Saved -> data/cf_artifacts.pkl")

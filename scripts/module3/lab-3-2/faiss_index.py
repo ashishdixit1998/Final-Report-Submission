@@ -13,6 +13,16 @@ import pickle
 import time
 import warnings
 warnings.filterwarnings('ignore')
+from pathlib import Path
+# Project root
+ROOT = Path(__file__).resolve().parents[3]
+
+
+DATA_DIR = ROOT / "data"
+
+# Output folder
+OUTPUT_DIR = ROOT / "output/Lab3"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 try:
     import faiss
@@ -34,7 +44,7 @@ print("=" * 60)
 # ---------------------------------------------------------------------------
 print("\n[1] Loading ALS artifacts from Lab 3.1...")
 
-with open("../../../data/als_artifacts.pkl", "rb") as f:
+with open(DATA_DIR / "als_artifacts.pkl", "rb") as f:
     als = pickle.load(f)
 
 # Extract parameters from the loaded dictionary package
@@ -297,7 +307,7 @@ axes[1].set_xlabel("Percentile")
 axes[1].set_ylabel("Latency (ms)")
 
 plt.tight_layout()
-plt.savefig("../../../output/Lab3/02_faiss_latency.png", dpi=150, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "02_faiss_latency.png", dpi=150, bbox_inches='tight')
 plt.show()
 
 
@@ -311,8 +321,8 @@ if FAISS_AVAILABLE and index_approx is not None:
     # Hint: Call faiss.write_index(index_approx, "data/faiss_index.bin")
     faiss.write_index(
     index_approx,
-    "../../../data/faiss_index.bin"
-    )
+    str(DATA_DIR / "faiss_index.bin")
+)
 
 # TODO: Save tracking parameters, normalization matrices, validation scores, and flags to an output pickle index package
 # Target Path: "data/faiss_artifacts.pkl"
@@ -329,8 +339,8 @@ faiss_artifacts = {
     "nprobe": nprobe
 }
 
-with open("../../../data/faiss_artifacts.pkl","wb") as f:
-    pickle.dump(faiss_artifacts,f)
+with open(DATA_DIR / "faiss_artifacts.pkl", "wb") as f:
+    pickle.dump(faiss_artifacts, f)
 
 print("    Saved -> data/faiss_artifacts.pkl")
 print("    Move to: 03_hybrid_routing.py")
